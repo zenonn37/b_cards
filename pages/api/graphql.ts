@@ -1,8 +1,11 @@
 import { ApolloServer,gql } from "apollo-server-micro";
 import Cors from 'micro-cors';
+import { PrismaClient } from "@prisma/client"
 
 
 const cors = Cors()
+
+const prisma = new PrismaClient()
 
 const typeDefs = gql`
   type Card{
@@ -13,8 +16,21 @@ const typeDefs = gql`
     bio:String!
   }
 
+
+  input CardInput{
+    name:String!
+    email:String!
+    phone:String!
+    bio:String!
+  }
+
   type Query {
     getCards: [Card]
+    getCard(id:Int!):Card
+  }
+
+  type Mutation{
+    addCard(input: CardInput!): Card
   }
 
 
@@ -25,11 +41,30 @@ const typeDefs = gql`
 
 const resolvers = {
   Query:{
-    sayHello(_parent, _args, _context){
-      return 'Hello World';
+  getCards: async () => {
+    return await prisma.card.findMany({
+      take:10,
+    })
+  },
+  getCard:async (_parent, _args) => {
+    return await prisma.card.findUnique({
+      where:{
+        id: Number(_args.id)
+      }
+    })
+  },
+    },
+    Mutation:{
+      addCard:async (_parent, _args) => {
+
+        return await prisma.card.create({
+          data: _args.input
+        })
+     
+      }
     }
   }
-}
+
 
 export const config = {
   api:{
