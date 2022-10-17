@@ -31,6 +31,8 @@ const typeDefs = gql`
 
   type Mutation{
     addCard(input: CardInput!): Card
+    deleteCard(id: Int!): Card
+    updateCard(id:Int!,input: CardInput!): Card
   }
 
 
@@ -46,7 +48,7 @@ const resolvers = {
       take:10,
     })
   },
-  getCard:async (_parent, _args) => {
+  getCard:async (_parent:any, _args:any) => {
     return await prisma.card.findUnique({
       where:{
         id: Number(_args.id)
@@ -55,12 +57,25 @@ const resolvers = {
   },
     },
     Mutation:{
-      addCard:async (_parent, _args) => {
+      addCard:async (_parent:any, _args:any) => {
 
         return await prisma.card.create({
           data: _args.input
         })
      
+      },
+      deleteCard:async (_parent:any, _args:any) => {
+        return await prisma.card.delete({
+          where:{
+            id: Number(_args.id)
+          }
+        })
+      },
+      updateCard:async (_parent:any,_args:any) => {
+          return await prisma.card.update({
+            where:{id:_args.id},
+            data:_args.input
+          })
       }
     }
   }
