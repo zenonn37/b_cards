@@ -1,5 +1,6 @@
 import React from 'react'
 import { gql,useQuery } from "@apollo/client";
+import Link from 'next/link';
 
 type Props = {}
 
@@ -16,7 +17,7 @@ const GET_CARDS = gql`
  }
 `
 
-export default function search({}: Props) {
+export default function Cards({}: Props) {
     const { loading, error, data } = useQuery(GET_CARDS)
   
     if (loading) return 'Loading...';
@@ -25,11 +26,13 @@ export default function search({}: Props) {
     
     return (
     <div>
-        <ul>
+      
         {data.getCards.map((card:any) =>(
-           <li key={card.id}>{card.name}</li> 
+            <div className=' p-2 cursor-pointer'>
+           <Link href={'/cards/' +  card.id} key={card.id}>{card.name}</Link> 
+           </div>
         ))}
-        </ul>
+       
     </div>
   )
 }

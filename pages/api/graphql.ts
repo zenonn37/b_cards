@@ -24,6 +24,13 @@ const typeDefs = gql`
     bio:String!
   }
 
+  input CardUpdate{
+    name:String
+    email:String
+    phone:String
+    bio:String
+  }
+
   type Query {
     getCards: [Card]
     getCard(id:Int!):Card
@@ -32,7 +39,7 @@ const typeDefs = gql`
   type Mutation{
     addCard(input: CardInput!): Card
     deleteCard(id: Int!): Card
-    updateCard(id:Int!,input: CardInput!): Card
+    updateCard(id:Int!,input: CardUpdate!): Card
   }
 
 
