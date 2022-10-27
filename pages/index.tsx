@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   <div className=' bg-gray-900 text-white text-3xl font-semibold 
   rounded-md px-6 py-3
    hover:bg-gray-800 ml-4'>
-  <Link href='/search'>
+  <Link href='/cards'>
       <a>Find People</a>
     </Link>
   </div>
