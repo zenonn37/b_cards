@@ -6,7 +6,7 @@ type Props = {}
 
 
 const GET_CARDS = gql`
- query GetCard{
+ query GetCards{
     getCards {
     id
     name
@@ -21,6 +21,9 @@ const DELETE_CARD = gql`
   deleteCard(id: $id){
     id
     name
+    email
+    phone
+    bio
   }
  }
 `
@@ -29,12 +32,38 @@ const DELETE_CARD = gql`
 
 export default function Cards({}: Props) {
     const { loading, error, data } = useQuery(GET_CARDS)
-    const [deleteCard] = useMutation(DELETE_CARD,{
-      refetchQueries:[
-        {
+    const [deleteCard,{}] = useMutation(DELETE_CARD,{
+     
+      onError: (error) => alert(error.message),
+      update:(cache,{ data }) => {
+        console.log(cache,data);
+
+        const { getCards } = cache.readQuery({
           query: GET_CARDS
-        }
-      ]
+        });
+
+        cache.writeQuery({
+          query: GET_CARDS,
+          data:{
+           getCards: getCards.filter(card => card.id !== data.deleteCard.id)
+          }
+        })
+      }
+      // refetchQueries:[
+      //   {
+      //     query: GET_CARDS
+      //   }
+      // ]
+      // update:(cache, {data}) =>{
+      //   const cacheId = cache.identify(data.name)
+      //   cache.modify({
+      //     fields:{
+      //       name:(existingFieldData,{toReference})
+      //     }
+      //   })
+
+      // }
+ 
     })
   
     if (loading) return 'Loading...';

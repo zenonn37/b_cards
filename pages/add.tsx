@@ -27,7 +27,12 @@ const Add = (props: Props) => {
 
 
     let inp;
-    const [addCard, {data,loading,error}] = useMutation(ADD_CARD)
+    const [addCard, {data,loading,error}] = useMutation(ADD_CARD,{
+      update: (cache, data) => {
+        console.log(cache, data);
+        
+      }
+    })
     const {register, handleSubmit, watch, formState: {errors} } =  useForm();
 
     if (loading) return 'Submitting...';
