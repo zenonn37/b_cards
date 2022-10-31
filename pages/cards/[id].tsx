@@ -81,11 +81,13 @@ function Details({ }: Props) {
         
      }
   return (
-    <div className=' flex justify-center items-center'>
+    <main>
       
-      
-      <div>
-      <div>
+      <div className=' mb-10'>
+        <h1>Name: {name}</h1>
+      </div>
+     
+      <div className='  bg-slate-400'>
         <form onSubmit={handleSubmit(onSubmit)}>
       {/* register your input into the hook by invoking the "register" function */}
       <div>
@@ -113,9 +115,9 @@ function Details({ }: Props) {
       <input className=' bg-blue-600 text-white py-3 px-6' type="submit" />
     </form>
         </div>
-      </div>
+    
      
-    </div>
+    </main>
   )
 }
 

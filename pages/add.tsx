@@ -1,9 +1,9 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
 import { gql,useMutation } from "@apollo/client";
+import { useRouter } from 'next/router';
 
 type Props = {}
-
 
 
 
@@ -25,8 +25,11 @@ const ADD_CARD = gql`
   
 const Add = (props: Props) => {
 
+  const router =  useRouter()
 
-    let inp;
+
+
+  
     const [addCard, {data,loading,error}] = useMutation(ADD_CARD,{
       update: (cache, data) => {
         console.log(cache, data);
@@ -49,6 +52,8 @@ const Add = (props: Props) => {
                 input:values
             }
         })
+
+      router.push('/cards')
 
         console.log(data);
         
