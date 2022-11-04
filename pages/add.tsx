@@ -44,17 +44,22 @@ const Add = (props: Props) => {
 
   
     const [addCard, {data,loading,error}] = useMutation(ADD_CARD,{
-      update: (cache, data) => {
+      update: (cache, { data }) => {
         console.log(cache, data);
         const { getCards } = cache.readQuery({
           query: GET_CARDS
         });
 
+        console.log(getCards);
+
+        
+        
+
         cache.writeQuery({
           query: GET_CARDS,
           data:{
             getCards:[
-              data.getCards,
+              data.addCard,
               ...getCards
             ]
 
