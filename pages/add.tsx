@@ -8,6 +8,19 @@ type Props = {}
 
 
 
+const GET_CARDS = gql`
+ query GetCards{
+    getCards {
+    id
+    name
+    email
+    phone
+    bio
+  }
+ }
+`
+
+
 
 const ADD_CARD = gql`
 
@@ -32,6 +45,22 @@ const Add = (props: Props) => {
   
     const [addCard, {data,loading,error}] = useMutation(ADD_CARD,{
       update: (cache, data) => {
+        console.log(cache, data);
+        const { getCards } = cache.readQuery({
+          query: GET_CARDS
+        });
+
+        cache.writeQuery({
+          query: GET_CARDS,
+          data:{
+            getCards:[
+              data.getCards,
+              ...getCards
+            ]
+
+          }
+       
+        })
         console.log(cache, data);
         
       }
