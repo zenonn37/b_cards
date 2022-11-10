@@ -17,5 +17,17 @@ model Card{
   email String
   phone String
   bio String
+  employer Company @relation(fields: [employerId], references:[id])
+  employerId Int
+   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   
+}
+
+model Company{
+  id Int @id @default(autoincrement())
+  name String
+  employees Card[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

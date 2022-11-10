@@ -14,6 +14,16 @@ const typeDefs = gql`
     email:String!
     phone:String!
     bio:String!
+    employerId: Int
+  }
+
+  type Company{
+    id:Int!
+    name: String!
+    employees:[Card]
+    createdAt: String
+    updatedAt: String
+
   }
 
 
@@ -22,6 +32,7 @@ const typeDefs = gql`
     email:String!
     phone:String!
     bio:String!
+    employerId: Int
   }
 
   input CardUpdate{
@@ -32,8 +43,12 @@ const typeDefs = gql`
   }
 
   type Query {
+
+    companies: [Company]
     getCards: [Card]
     getCard(id:Int!):Card
+    getCompanys:[Company]
+    getCompany(id:Int!):Company
   }
 
   type Mutation{
@@ -49,7 +64,18 @@ const typeDefs = gql`
 
 
 const resolvers = {
+
+
   Query:{
+
+    companies:async () => {
+    
+      return await prisma.company.findMany({
+        take:10
+      })
+      
+      
+    },
   getCards: async () => {
     return await prisma.card.findMany({
       take:10,
@@ -62,6 +88,26 @@ const resolvers = {
       }
     })
   },
+  getCompanys:async () => {
+    return await prisma.company.findMany({
+      take:10
+    })
+  },
+
+    },
+    Company:{
+      employees: async (parent:any) => {
+        console.log(parent.id);
+        const emp =  await prisma.card.findMany({
+          where:{
+            employerId: parent.id
+          }
+        })
+        console.log(emp);
+        
+        return emp
+      }
+  
     },
     Mutation:{
       addCard:async (_parent:any, _args:any) => {
